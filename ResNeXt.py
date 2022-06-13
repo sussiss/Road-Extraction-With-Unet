@@ -2,8 +2,12 @@ import os
 import torch
 import torch.nn as nn
 import torch.utils.model_zoo as model_zoo
-from resnext_features.resnext101_32x4d_features import resnext101_32x4d_features,resnext101_32x4d_features_blob
-from resnext_features import resnext101_64x4d_features
+import pretrainedmodels
+
+
+
+from pretrainedmodels.models.resnext_features.resnext101_32x4d_features import resnext101_32x4d_features
+from pretrainedmodels.models.resnext_features import resnext101_64x4d_features
 
 __all__ = ['ResNeXt101_32x4d', 'resnext101_32x4d',
            'ResNeXt101_64x4d', 'resnext101_64x4d']
@@ -39,7 +43,7 @@ class ResNeXt101_32x4d_blob(nn.Module):
         super(ResNeXt101_32x4d_blob, self).__init__()
         self.num_classes = num_classes
         
-        resnext = resnext101_32x4d_features_blob()
+        resnext = resnext101_32x4d_features()
         
         self.features = resnext.resnext101_32x4d_features
         self.avg_pool = nn.AvgPool2d((7, 7), (1, 1))

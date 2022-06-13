@@ -5,8 +5,7 @@ from torch.nn import functional as F
 import torch
 from torch.autograd import Variable
 
-import lovasz_losses as L
-
+from segmentation_models_pytorch.losses import lovasz as L
 
 # http://jeffwen.com/2018/02/23/road_extraction
 class BCEDiceLoss(nn.Module):
@@ -95,7 +94,7 @@ def jaccard_index(input, target):
 
     score = (intersection + 1e-15) / (union + 1e-15)
 
-    return score.mean().data[0]
+    return score.mean().data
 
 
 
@@ -112,7 +111,7 @@ def dice_coeff(input, target):
 
     loss = (2. * intersection + smooth) /(pred.sum(1) + truth.sum(1) + smooth)
 
-    return loss.mean().data[0]
+    return loss.mean().data
 
 # https://github.com/ternaus/robot-surgery-segmentation/blob/master/loss.py
 class LossBinaryJaccard(object):

@@ -15,7 +15,7 @@ import ternausnet
 import linknet
 import albunet_v2
 import albunet18
-import albunet50
+import albunet50      
 import TernausDense
 import TernausXt
 
@@ -316,10 +316,10 @@ def make_train_step(idx, data, model, optimizer, criterion, meters):
 
 
     meters["train_acc"].update(metrics.dice_coeff(outputs, labels), outputs.size(0))
-    meters["train_loss"].update(loss.data[0], outputs.size(0))
+    meters["train_loss"].update(loss.data, outputs.size(0))
     meters["train_IoU"].update(metrics.jaccard_index(outputs, labels), outputs.size(0))
-    meters["train_BCE"].update(BCE_loss.data[0], outputs.size(0))
-    meters["train_DICE"].update(DICE_loss.data[0], outputs.size(0))
+    meters["train_BCE"].update(BCE_loss.data, outputs.size(0))
+    meters["train_DICE"].update(DICE_loss.data, outputs.size(0))
     meters["outputs"] = outputs
     return meters
 
@@ -366,8 +366,7 @@ def train(train_loader, model, criterion, optimizer, scheduler, logger, epoch_nu
 
         # tensorboard logging
         if idx % log_iter == 0:
-
-            step = (epoch_num*logger.print_freq)+(idx/log_iter)
+            step = (epoch_num*logger.print_freq)+int(idx/log_iter)
 
             # log accuracy and loss
             info = {
@@ -448,16 +447,16 @@ def validation(valid_loader, model, criterion, logger, epoch_num):
             loss, BCE_loss, DICE_loss = criterion(outputs, labels)
 
         valid_acc.update(metrics.dice_coeff(outputs, labels), outputs.size(0))
-        valid_loss.update(loss.data[0], outputs.size(0))
+        valid_loss.update(loss.data, outputs.size(0))
         valid_IoU.update(metrics.jaccard_index(outputs, labels), outputs.size(0))
-        valid_BCE.update(BCE_loss.data[0], outputs.size(0))
-        valid_DICE.update(DICE_loss.data[0], outputs.size(0))
+        valid_BCE.update(BCE_loss.data, outputs.size(0))
+        valid_DICE.update(DICE_loss.data, outputs.size(0))
 
 
         # tensorboard logging
         if idx % log_iter == 0:
 
-            step = (epoch_num*logger.print_freq)+(idx/log_iter)
+            step = (epoch_num*logger.print_freq)+int(idx/log_iter)
 
             # log accuracy and loss
             info = {

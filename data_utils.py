@@ -1,6 +1,6 @@
 
 # from torchvision.datasets.folder import *
-import scipy.misc
+import imageio
 from PIL import Image
 import os
 import numpy as np
@@ -21,19 +21,19 @@ class DeepGlobeDataset(object):
         self.status = status
         self.root_dir = root_dir
         self.transform = transform
-        self.sat_img_names = list(filter(lambda x: '_sat_' in x, os.listdir(os.path.join(self.root_dir, self.status))))
+        self.sat_img_names = list(filter(lambda x: '_sat' in x, os.listdir(os.path.join(self.root_dir, self.status))))
         # self.loader = loader
 
     def __getitem__(self, index):
         sat_img_nm = self.sat_img_names[index]
-        mask_img_nm = self.sat_img_names[index].split('_')[0] + '_mask_' + self.sat_img_names[index].split('_')[2].split('.')[0] + '.png'
-
+        # print(self.sat_img_names[index].split('_'))
+        mask_img_nm = self.sat_img_names[index].split('_')[0] + '_mask' + '.png'
         sat_img_path = os.path.join(self.root_dir, self.status, sat_img_nm)
         mask_img_path = os.path.join(self.root_dir, self.status, mask_img_nm)
 
-        sat_img = scipy.misc.imread(sat_img_path)
+        sat_img = imageio.imread(sat_img_path)
         # sat_img = Image.open(sat_img_path)
-        mask_img = scipy.misc.imread(mask_img_path)
+        mask_img = imageio.imread(mask_img_path)
 
         mask = np.zeros((mask_img.shape[0], mask_img.shape[1]))
         # since it is not exactly 255 for road area, binarize at 128

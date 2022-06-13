@@ -5,7 +5,9 @@ import torch
 # from torchvision import models
 import torchvision
 
-import resnet_v2
+
+import tensorflow.keras.applications.resnet_v2
+
 
 
 # def conv3x3(in_, out):
